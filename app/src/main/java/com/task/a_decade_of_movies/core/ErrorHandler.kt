@@ -1,7 +1,6 @@
-package com.ea.eaapp.core.network
+package com.task.a_decade_of_movies.core
 
-import com.ea.eaapp.R
-import com.ea.eaapp.core.app.UiText
+import com.task.a_decade_of_movies.R
 
 fun handleError(message: String): UiText {
     return when (message) {

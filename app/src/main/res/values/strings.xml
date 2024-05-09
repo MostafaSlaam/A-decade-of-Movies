@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">A-decade-of-Movies</string>
+    <string name="strThereWasProblemConnecting">There was a problem connecting to the server</string>
+    <string name="strThereIsNoInternetConnection">There is no internet connection</string>
 </resources>

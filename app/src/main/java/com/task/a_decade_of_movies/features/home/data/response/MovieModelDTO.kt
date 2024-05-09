@@ -1,6 +1,6 @@
-package com.task.a_decade_of_movies.features.home.domain.model
+package com.task.a_decade_of_movies.features.home.data.response
 
-data class MovieModel(
+data class MovieModelDTO(
     val title: String,
     val year: Int,
     val cast: List<String>,

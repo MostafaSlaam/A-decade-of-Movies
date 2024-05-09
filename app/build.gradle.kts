@@ -84,4 +84,6 @@ dependencies {
 
     // Coil & AsyncImage
     implementation( "io.coil-kt:coil-compose:2.2.2")
+    //json
+    implementation("com.google.code.gson:gson:2.8.9")
 }

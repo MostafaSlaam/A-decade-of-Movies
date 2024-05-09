@@ -1,7 +1,7 @@
-package com.edu.academy.core.app
+package com.task.a_decade_of_movies.core
 import android.content.Context
 import android.content.SharedPreferences
-import com.edu.academy.core.theme.AppTheme
+
 import kotlin.properties.Delegates
 
 object AppPreferences {
@@ -67,22 +67,22 @@ object AppPreferences {
     }
 
     fun getLocale(): String {
-        return appPrefence.getString(ApplicationLocale_PREF, "ar")!!
+        return appPrefence.getString(ApplicationLocale_PREF, "en")!!
     }
 
 
 
     const val APP_THEME = "AppTheme"
 
-    fun setTheme(theme: String) {
-        preferenceEditor = appPrefence.edit()
-        preferenceEditor.putString(APP_THEME, theme)
-        preferenceEditor.commit()
-    }
-
-    fun getTheme(): String {
-        return appPrefence.getString(APP_THEME, AppTheme.Default.name)!!
-    }
+//    fun setTheme(theme: String) {
+//        preferenceEditor = appPrefence.edit()
+//        preferenceEditor.putString(APP_THEME, theme)
+//        preferenceEditor.commit()
+//    }
+//
+//    fun getTheme(): String {
+//        return appPrefence.getString(APP_THEME, AppTheme.Default.name)!!
+//    }
 
 
 

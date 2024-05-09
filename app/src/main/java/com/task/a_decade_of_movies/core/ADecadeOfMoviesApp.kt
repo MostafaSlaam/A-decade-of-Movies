@@ -1,11 +1,11 @@
-package com.edu.academy.core.app
+package com.task.a_decade_of_movies.core
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
 
 
 @HiltAndroidApp
-class ConcreteApp: Application() {
+class ADecadeOfMoviesApp: Application() {
 
     override fun onCreate() {
         super.onCreate()

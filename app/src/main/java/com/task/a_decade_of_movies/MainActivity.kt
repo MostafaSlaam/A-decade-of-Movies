@@ -54,10 +54,10 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+//        WindowCompat.setDecorFitsSystemWindows(window, false)
         window.setBackgroundDrawable(null)
         setContent {
-            val scope = rememberCoroutineScope()
+
             AdecadeofMoviesTheme {
                 // A surface container using the 'background' color from the theme
                 val navController = rememberNavController()
@@ -66,7 +66,7 @@ class MainActivity : ComponentActivity() {
 
                     Scaffold(
                         scaffoldState = scaffoldState,
-                        modifier = Modifier.navigationBarsPadding(),
+//                        modifier = Modifier.navigationBarsPadding(),
                     ) {
                         Body(
                             modifier = Modifier.padding(it),

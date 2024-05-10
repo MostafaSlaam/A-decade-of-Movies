@@ -22,6 +22,7 @@ class HomeViewModel @Inject constructor(
 
     private val _homeState = mutableStateOf<DataState<List<MovieModel>>>(DataState.Init)
     val homeState: State<DataState<List<MovieModel>>> = _homeState
+    var search = mutableStateOf("")
 
 
     fun onEvent(event: HomeEvent) {

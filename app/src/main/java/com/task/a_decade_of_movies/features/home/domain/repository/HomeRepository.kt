@@ -6,4 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface HomeRepository {
     suspend fun getMoviesFromFile(): Flow<DataState<List<MovieModel>>>
+    suspend fun categoriesSortingList(list:List<MovieModel>): Flow<DataState<List<MovieModel>>>
+
+    suspend fun search(word:String,sortedList:List<MovieModel>): Flow<DataState<List<MovieModel>>>
 }

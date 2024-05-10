@@ -59,6 +59,8 @@ fun HomeScreen(
             TextField(
                 value = viewModel.search.value, onValueChange = { new ->
                     viewModel.search.value = new
+                    if (viewModel.search.value.length>3)
+                        viewModel.onEvent(HomeEvent.Search)
                 }, modifier = Modifier
                     .padding(10.dp),
                 placeholder = { Text("Search") },
@@ -84,11 +86,12 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.size(20.dp))
             val moviesState = viewModel.homeState.value
-            if (viewModel.search.value.isEmpty())
+            val searchState=viewModel.searchState.value
+
                 LazyColumn(
                     modifier = Modifier.weight(1f),
                 ) {
-
+                    if (viewModel.search.value.isEmpty())
                     when (moviesState) {
                         is DataState.Failure -> {
 //                    item {
@@ -126,6 +129,44 @@ fun HomeScreen(
                         else -> {}
 
                     }
+                    else
+                        when(searchState) {
+                            is DataState.Failure -> {
+//                    item {
+//                        EmptyData(
+//                            modifier = Modifier.fillParentMaxSize(),
+//                            painter = painterResource(id = R.drawable.ic_no_internet),
+//                            text = stringResource(id = R.string.strEmptyData)
+//                        )
+//                    }
+                            }
+
+                            is DataState.Loading -> {
+                                item {
+                                    Column {
+                                        Box(modifier = Modifier.fillParentMaxSize()) {
+                                            CircularProgressIndicator(
+                                                modifier = Modifier.align(Alignment.Center),
+                                                color = MaterialTheme.colors.primary
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+
+                            is DataState.Success -> {
+                                items(searchState.data.size) {
+                                    MovieItem(searchState.data[it]) {
+
+                                    }
+                                }
+
+                            }
+
+
+                            else -> {}
+
+                        }
 
                 }
 

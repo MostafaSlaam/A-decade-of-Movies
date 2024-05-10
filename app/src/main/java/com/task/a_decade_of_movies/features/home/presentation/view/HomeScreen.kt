@@ -24,11 +24,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.task.a_decade_of_movies.core.AppPreferences
 import com.task.a_decade_of_movies.core.DataState
 import com.task.a_decade_of_movies.features.home.domain.model.MovieModel
 import com.task.a_decade_of_movies.features.home.presentation.viewmodel.HomeEvent
 import com.task.a_decade_of_movies.features.home.presentation.viewmodel.HomeViewModel
 import com.task.a_decade_of_movies.features.main.MainViewModel
+import com.task.a_decade_of_movies.route.AppScreen
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
@@ -59,7 +61,7 @@ fun HomeScreen(
             TextField(
                 value = viewModel.search.value, onValueChange = { new ->
                     viewModel.search.value = new
-                    if (viewModel.search.value.length>3)
+                    if (viewModel.search.value.length > 3)
                         viewModel.onEvent(HomeEvent.Search)
                 }, modifier = Modifier
                     .padding(10.dp),
@@ -86,12 +88,12 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.size(20.dp))
             val moviesState = viewModel.homeState.value
-            val searchState=viewModel.searchState.value
+            val searchState = viewModel.searchState.value
 
-                LazyColumn(
-                    modifier = Modifier.weight(1f),
-                ) {
-                    if (viewModel.search.value.isEmpty())
+            LazyColumn(
+                modifier = Modifier.weight(1f),
+            ) {
+                if (viewModel.search.value.isEmpty())
                     when (moviesState) {
                         is DataState.Failure -> {
 //                    item {
@@ -119,6 +121,45 @@ fun HomeScreen(
                         is DataState.Success -> {
                             items(moviesState.data.size) {
                                 MovieItem(moviesState.data[it]) {
+                                    AppPreferences.storeCurrentMovie(moviesState.data[it])
+                                    navController.navigate(AppScreen.MovieScreen.route)
+                                }
+                            }
+
+                        }
+
+
+                        else -> {}
+
+                    }
+                else
+                    when (searchState) {
+                        is DataState.Failure -> {
+//                    item {
+//                        EmptyData(
+//                            modifier = Modifier.fillParentMaxSize(),
+//                            painter = painterResource(id = R.drawable.ic_no_internet),
+//                            text = stringResource(id = R.string.strEmptyData)
+//                        )
+//                    }
+                        }
+
+                        is DataState.Loading -> {
+                            item {
+                                Column {
+                                    Box(modifier = Modifier.fillParentMaxSize()) {
+                                        CircularProgressIndicator(
+                                            modifier = Modifier.align(Alignment.Center),
+                                            color = MaterialTheme.colors.primary
+                                        )
+                                    }
+                                }
+                            }
+                        }
+
+                        is DataState.Success -> {
+                            items(searchState.data.size) {
+                                MovieItem(searchState.data[it]) {
 
                                 }
                             }
@@ -129,46 +170,8 @@ fun HomeScreen(
                         else -> {}
 
                     }
-                    else
-                        when(searchState) {
-                            is DataState.Failure -> {
-//                    item {
-//                        EmptyData(
-//                            modifier = Modifier.fillParentMaxSize(),
-//                            painter = painterResource(id = R.drawable.ic_no_internet),
-//                            text = stringResource(id = R.string.strEmptyData)
-//                        )
-//                    }
-                            }
 
-                            is DataState.Loading -> {
-                                item {
-                                    Column {
-                                        Box(modifier = Modifier.fillParentMaxSize()) {
-                                            CircularProgressIndicator(
-                                                modifier = Modifier.align(Alignment.Center),
-                                                color = MaterialTheme.colors.primary
-                                            )
-                                        }
-                                    }
-                                }
-                            }
-
-                            is DataState.Success -> {
-                                items(searchState.data.size) {
-                                    MovieItem(searchState.data[it]) {
-
-                                    }
-                                }
-
-                            }
-
-
-                            else -> {}
-
-                        }
-
-                }
+            }
 
         }
     }
@@ -203,8 +206,8 @@ fun MovieItem(model: MovieModel, onclick: () -> Unit) {
         )
         Spacer(modifier = Modifier.size(10.dp))
         Row {
-            Text( modifier = Modifier.padding(horizontal = 10.dp),text = "Rate: ")
-            for (star in 1.. model.rating){
+            Text(modifier = Modifier.padding(horizontal = 10.dp), text = "Rate: ")
+            for (star in 1..model.rating) {
                 Icon(
                     imageVector = Icons.Outlined.Star,
                     contentDescription = null

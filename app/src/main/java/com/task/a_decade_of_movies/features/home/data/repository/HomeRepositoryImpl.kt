@@ -104,7 +104,7 @@ class HomeRepositoryImpl @Inject constructor(
                 var newMap =
                     mapList.map { it.key to it.value }.sortedByDescending { it.first }.toMap()
                 var finalList = ArrayList<MovieModel>()
-                //take top 5 movies 
+                //take top 5 movies
                 newMap.values.forEach { value ->
                     finalList.addAll(ArrayList(value.take(5)))
                 }

@@ -1,6 +1,9 @@
 package com.task.a_decade_of_movies.core
 import android.content.Context
 import android.content.SharedPreferences
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import com.task.a_decade_of_movies.features.home.domain.model.MovieModel
 
 import kotlin.properties.Delegates
 
@@ -12,7 +15,7 @@ object AppPreferences {
     // notifications preference
     internal var ApplicationLocale_PREF = "ApplicationLocale"
     internal var preferenceEditor: SharedPreferences.Editor by Delegates.notNull<SharedPreferences.Editor>()
-    internal var PREFS_NAME = "CONCRETEAppPref"
+    internal var PREFS_NAME = "MOVIESAppPref"
 
     fun initializePreferences(context: Context) {
         appPrefence = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
@@ -23,7 +26,7 @@ object AppPreferences {
 
     //region User
     //key
-    const val CURRENT_USER = "CurrentUser"
+    const val CURRENT_MOVIE = "current_movie"
     const val CURRENT_PASSWORD = "CurrentPassword"
     const val CURRENT_EMAIL = "CurrentEmail"
     const val ACCESS_TOKEN = "AccessToken"
@@ -44,6 +47,33 @@ object AppPreferences {
         return appPrefence.getString(FCM_TOKEN, "")!!
     }
 
+
+    fun storeCurrentMovie(movie: MovieModel) {
+        try {
+            var bodyjson = ""
+            val gson = Gson()
+            bodyjson = gson.toJson(movie)
+            preferenceEditor = appPrefence.edit()
+            preferenceEditor.putString(CURRENT_MOVIE, bodyjson)
+            preferenceEditor.commit()
+        } catch (e1: Exception) {
+            e1.printStackTrace()
+
+        }
+
+    }
+
+    fun getCurrentMovie(): MovieModel? {
+        val json= appPrefence.getString(CURRENT_MOVIE, "")!!
+        try {
+            val gson = Gson()
+            val type = object : TypeToken<MovieModel>() {}.type
+            return gson.fromJson(json, type)
+        } catch (e1: Exception) {
+            e1.printStackTrace()
+            return null!!
+        }
+    }
 
 
 
@@ -74,15 +104,7 @@ object AppPreferences {
 
     const val APP_THEME = "AppTheme"
 
-//    fun setTheme(theme: String) {
-//        preferenceEditor = appPrefence.edit()
-//        preferenceEditor.putString(APP_THEME, theme)
-//        preferenceEditor.commit()
-//    }
-//
-//    fun getTheme(): String {
-//        return appPrefence.getString(APP_THEME, AppTheme.Default.name)!!
-//    }
+
 
 
 

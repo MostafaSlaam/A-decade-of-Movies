@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.task.a_decade_of_movies.features.home.presentation.view.HomeScreen
 import com.task.a_decade_of_movies.features.main.MainViewModel
+import com.task.a_decade_of_movies.features.movie_details.presentation.view.MovieDetailsScreen
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
@@ -32,6 +33,12 @@ fun NavigationGraph(
         composable(route = AppScreen.HomeScreen.route) {
 
             HomeScreen(navController = navHostController, mainViewModel = mainViewModel)
+
+
+        }
+        composable(route = AppScreen.MovieScreen.route) {
+
+            MovieDetailsScreen(navController = navHostController, mainViewModel = mainViewModel)
 
 
         }

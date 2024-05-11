@@ -6,6 +6,7 @@ import com.task.a_decade_of_movies.core.Constants
 import com.task.a_decade_of_movies.core.ConstantsErrorHandler
 import com.task.a_decade_of_movies.core.DataState
 import com.task.a_decade_of_movies.core.handleError
+import com.task.a_decade_of_movies.database.LocalDataSource
 import com.task.a_decade_of_movies.features.home.data.data_source.HomeRemoteDataSource
 import com.task.a_decade_of_movies.features.home.data.mapper.mapFromListModel
 import com.task.a_decade_of_movies.features.home.domain.model.MovieModel
@@ -16,7 +17,8 @@ import java.util.Locale
 import javax.inject.Inject
 
 class HomeRepositoryImpl @Inject constructor(
-    private val homeRemoteDataSource: HomeRemoteDataSource
+    private val homeRemoteDataSource: HomeRemoteDataSource,
+    private val localDataSource: LocalDataSource
 ) : HomeRepository {
     override suspend fun getMoviesFromFile(): Flow<DataState<List<MovieModel>>> = flow {
         emit(DataState.Loading)
@@ -111,6 +113,33 @@ class HomeRepositoryImpl @Inject constructor(
 
                 emit(DataState.Success<List<MovieModel>>(finalList))
 
+
+            } catch (exception: Exception) {
+                emit(DataState.Failure(uiText = handleError(ConstantsErrorHandler.EXCEPTION_MESSAGE)))
+            }
+        }
+
+
+    override suspend fun getMoviesDB(): Flow<DataState<List<MovieModel>>> = flow {
+        emit(DataState.Loading)
+        try {
+            emit(DataState.Success(localDataSource.getAllMovies()))
+        } catch (exception: Exception) {
+            emit(DataState.Failure(uiText = handleError(ConstantsErrorHandler.EXCEPTION_MESSAGE)))
+        }
+    }
+
+    override suspend fun insertMoviesDB(list: List<MovieModel>): Flow<DataState<Unit>> =
+        flow {
+            emit(DataState.Loading)
+
+            try {
+
+                list.forEach {
+                    localDataSource.insertMovies(it)
+                }
+
+                emit(DataState.Success(Unit))
 
             } catch (exception: Exception) {
                 emit(DataState.Failure(uiText = handleError(ConstantsErrorHandler.EXCEPTION_MESSAGE)))

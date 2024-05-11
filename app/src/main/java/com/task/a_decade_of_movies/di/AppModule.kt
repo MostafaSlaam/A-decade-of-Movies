@@ -2,6 +2,7 @@ package com.task.a_decade_of_movies.di
 
 import android.content.Context
 import com.task.a_decade_of_movies.core.Api
+import com.task.a_decade_of_movies.database.LocalDataSource
 import com.task.a_decade_of_movies.features.home.data.data_source.HomeRemoteDataSource
 import com.task.a_decade_of_movies.features.home.data.data_source.HomeRemoteDataSourceImpl
 import com.task.a_decade_of_movies.features.home.data.repository.HomeRepositoryImpl
@@ -30,9 +31,10 @@ object HomeModule {
     @Singleton
     @Provides
     fun providesHomeRepository(
-        authRemoteDataSource: HomeRemoteDataSource
+        authRemoteDataSource: HomeRemoteDataSource,
+        localDataSource: LocalDataSource
     ): HomeRepository {
-        return HomeRepositoryImpl(authRemoteDataSource)
+        return HomeRepositoryImpl(authRemoteDataSource,localDataSource)
     }
 
 

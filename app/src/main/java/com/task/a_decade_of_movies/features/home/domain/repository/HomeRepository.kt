@@ -9,4 +9,8 @@ interface HomeRepository {
     suspend fun categoriesSortingList(list:List<MovieModel>): Flow<DataState<List<MovieModel>>>
 
     suspend fun search(word:String,sortedList:List<MovieModel>): Flow<DataState<List<MovieModel>>>
+
+    suspend fun getMoviesDB(): Flow<DataState<List<MovieModel>>>
+
+    suspend fun insertMoviesDB(list:List<MovieModel>):Flow<DataState<Unit>>
 }

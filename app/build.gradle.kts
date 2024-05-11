@@ -42,7 +42,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
+        kotlinCompilerExtensionVersion = "1.5.3"
     }
     packaging {
         resources {
@@ -103,4 +103,9 @@ dependencies {
     implementation("androidx.test:runner:1.1.1")
     testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
     testImplementation ("org.robolectric:robolectric:4.2.1")
+
+    //room DB
+    implementation ("androidx.room:room-runtime:2.6.1")
+    annotationProcessor ("androidx.room:room-compiler:2.6.1")
+    ksp ("androidx.room:room-compiler:2.6.1")
 }

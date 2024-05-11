@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.task.a_decade_of_movies.core.DataState
 import com.task.a_decade_of_movies.features.home.domain.model.MovieModel
+import com.task.a_decade_of_movies.features.home.domain.usecase.GetInsertMoviesDBUseCase
+import com.task.a_decade_of_movies.features.home.domain.usecase.GetMoviesFromDBUseCase
 import com.task.a_decade_of_movies.features.home.domain.usecase.GetMoviesFromFileUseCase
 import com.task.a_decade_of_movies.features.home.domain.usecase.GetMoviesSortedUseCase
 import com.task.a_decade_of_movies.features.home.domain.usecase.GetSearchUseCase
@@ -13,6 +15,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,7 +23,9 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val getMoviesFromFileUseCase: GetMoviesFromFileUseCase,
     private val getMoviesSortedUseCase: GetMoviesSortedUseCase,
-    private val getSearchUseCase: GetSearchUseCase
+    private val getSearchUseCase: GetSearchUseCase,
+    private val getInsertMoviesDBUseCase: GetInsertMoviesDBUseCase,
+    private val getMoviesFromDBUseCase: GetMoviesFromDBUseCase
 ) : ViewModel() {
 
     private val _homeState = mutableStateOf<DataState<List<MovieModel>>>(DataState.Init)
@@ -35,8 +40,11 @@ class HomeViewModel @Inject constructor(
     fun onEvent(event: HomeEvent) {
         viewModelScope.launch {
             when (event) {
-                HomeEvent.GetDataFromFile -> {
-                    val job1 = async(Dispatchers.IO) { getMoviesFromFile() }
+                HomeEvent.GetMovies -> {
+                    val job1 = async(Dispatchers.IO) {
+
+                        getMoviesFromDB()
+                    }
                     job1.await()
                     launch(Dispatchers.IO) { getSortedList(unsortedMovies) }
 
@@ -59,8 +67,30 @@ class HomeViewModel @Inject constructor(
             Unit
         ).collect {
             _homeState.value = it
-            if (it is DataState.Success)
+            if (it is DataState.Success) {
+                insertMoviesDB(it.data)
                 unsortedMovies = it.data
+            }
+
+        }
+    }
+
+    private suspend fun getMoviesFromDB(){
+        getMoviesFromDBUseCase.execute(Unit).collect{
+            if (it is DataState.Success && it.data.isEmpty())
+                getMoviesFromFile()
+            else{
+                _homeState.value = it
+                if (it is DataState.Success) {
+                    unsortedMovies = it.data
+                }
+            }
+
+
+        }
+    }
+    private suspend fun insertMoviesDB(movies:List<MovieModel>){
+        getInsertMoviesDBUseCase.execute(movies).collect{
 
         }
     }
@@ -82,7 +112,7 @@ class HomeViewModel @Inject constructor(
 
 sealed class HomeEvent {
 
-    object GetDataFromFile : HomeEvent()
+    object GetMovies : HomeEvent()
     object Search : HomeEvent()
 
 

@@ -19,6 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -158,11 +159,23 @@ fun HomeScreen(
                         }
 
                         is DataState.Success -> {
-                            items(searchState.data.size) {
-                                MovieItem(searchState.data[it]) {
-
+                            searchState.data.forEachIndexed { index, movieModel ->
+                                if (index==0||(movieModel.year!=searchState.data[index-1].year))
+                                    item {
+                                        Text(
+                                            modifier = Modifier
+                                                .fillMaxWidth(), textAlign = TextAlign.Center,
+                                            text = movieModel.year.toString()
+                                        )
+                                    }
+                                item {
+                                    MovieItem(movieModel) {
+                                        AppPreferences.storeCurrentMovie(movieModel)
+                                        navController.navigate(AppScreen.MovieScreen.route)
+                                    }
                                 }
                             }
+
 
                         }
 

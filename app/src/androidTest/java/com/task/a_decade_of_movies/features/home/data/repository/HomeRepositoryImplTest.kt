@@ -116,4 +116,12 @@ class HomeRepositoryImplTest(
                 emit(DataState.Failure(uiText = handleError(ConstantsErrorHandler.EXCEPTION_MESSAGE)))
             }
         }
+
+    override suspend fun getMoviesDB(): Flow<DataState<List<MovieModel>>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun insertMoviesDB(list: List<MovieModel>): Flow<DataState<Unit>> {
+        TODO("Not yet implemented")
+    }
 }

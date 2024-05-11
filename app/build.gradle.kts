@@ -70,6 +70,8 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+    androidTestImplementation ("android.arch.core:core-testing:1.1.1")
+    androidTestImplementation ("com.google.truth:truth:1.0.1")
 
     // Material
     implementation ("androidx.compose.material:material:1.5.2")

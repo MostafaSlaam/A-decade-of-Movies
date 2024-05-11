@@ -58,8 +58,8 @@ fun HomeScreen(
             TextField(
                 value = viewModel.search.value, onValueChange = { new ->
                     viewModel.search.value = new
-                    if (viewModel.search.value.length > 3)
-                        viewModel.onEvent(HomeEvent.Search)
+                    
+                    viewModel.onEvent(HomeEvent.Search)
                 }, modifier = Modifier
                     .padding(10.dp),
                 placeholder = { Text("Search") },
@@ -156,7 +156,7 @@ fun HomeScreen(
 
                         is DataState.Success -> {
                             searchState.data.forEachIndexed { index, movieModel ->
-                                if (index==0||(index>0&&movieModel.year!=searchState.data[index-1].year))
+                                if (index == 0 || (index > 0 && movieModel.year != searchState.data[index - 1].year))
                                     item {
                                         Text(
                                             modifier = Modifier
